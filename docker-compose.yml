@@ -16,36 +16,67 @@ services:
   php1:
     <<: *php-template
     environment:
-      APP_NAME: Customer1
-      EMAIL_FROM: no-reply@instance1.yourdomain.com
-      EMAIL_DRIVER: smtp
-      SMTP_HOST: smtp.mailgun.org
-      SMTP_USER: user1
-      SMTP_PASS: pass1
+      APP_NAME: Customer One
+      SUBDOMAIN: app1.yourdomain.com
+      EMAIL_FROM: no-reply@app1.yourdomain.com
+      DB_HOST: db1
       DB_DATABASE: app1_db
+      DB_USER: app1_user
+      DB_PASSWORD: securepass1
+    volumes:
+      - ./app:/var/www/html
 
   php2:
     <<: *php-template
     environment:
-      APP_NAME: Customer2
-      EMAIL_FROM: no-reply@instance2.yourdomain.com
-      # ... different email creds, etc.
+      APP_NAME: Customer Two
+      SUBDOMAIN: app2.yourdomain.com
+      EMAIL_FROM: no-reply@app2.yourdomain.com
+      DB_HOST: db2
       DB_DATABASE: app2_db
+      DB_USER: app2_user
+      DB_PASSWORD: securepass2
+    volumes:
+      - ./app:/var/www/html
 
   php3:
     <<: *php-template
     environment:
+      APP_NAME: Customer Three
+      SUBDOMAIN: app3.yourdomain.com
+      EMAIL_FROM: no-reply@app3.yourdomain.com
+      DB_HOST: db3
       DB_DATABASE: app3_db
+      DB_USER: app3_user
+      DB_PASSWORD: securepass3
+    volumes:
+      - ./app:/var/www/html
 
   php4:
     <<: *php-template
     environment:
+      APP_NAME: Customer Four
+      SUBDOMAIN: app4.yourdomain.com
+      EMAIL_FROM: no-reply@app4.yourdomain.com
+      DB_HOST: db4
       DB_DATABASE: app4_db
+      DB_USER: app4_user
+      DB_PASSWORD: securepass4
+    volumes:
+      - ./app:/var/www/html
 
   php5:
     <<: *php-template
     environment:
+      APP_NAME: Customer Five
+      SUBDOMAIN: app5.yourdomain.com
+      EMAIL_FROM: no-reply@app5.yourdomain.com
+      DB_HOST: db5
       DB_DATABASE: app5_db
+      DB_USER: app5_user
+      DB_PASSWORD: securepass5
+    volumes:
+      - ./app:/var/www/html
 
   db1:
     <<: *db-template
@@ -69,6 +100,8 @@ services:
     <<: *db-template
     environment:
       POSTGRES_DB: app3_db
+      POSTGRES_USER: app3_user
+      POSTGRES_PASSWORD: securepass3
     volumes:
       - db3_data:/var/lib/postgresql/data
 
@@ -76,6 +109,8 @@ services:
     <<: *db-template
     environment:
       POSTGRES_DB: app4_db
+      POSTGRES_USER: app4_user
+      POSTGRES_PASSWORD: securepass4
     volumes:
       - db4_data:/var/lib/postgresql/data
 
@@ -83,13 +118,13 @@ services:
     <<: *db-template
     environment:
       POSTGRES_DB: app5_db
+      POSTGRES_USER: app5_user
+      POSTGRES_PASSWORD: securepass5
     volumes:
       - db5_data:/var/lib/postgresql/data
 
 x-php-template: &php-template
   image: php:8.3-fpm
-  volumes:
-    - ./app:/var/www/html
   working_dir: /var/www/html
 
 x-db-template: &db-template
