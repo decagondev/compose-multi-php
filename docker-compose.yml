@@ -1,0 +1,104 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/sites:/etc/nginx/conf.d
+      - ./app:/var/www/html:ro
+    depends_on:
+      - php1
+      - php2
+      - php3
+      - php4
+      - php5
+
+  php1:
+    <<: *php-template
+    environment:
+      APP_NAME: Customer1
+      EMAIL_FROM: no-reply@instance1.yourdomain.com
+      EMAIL_DRIVER: smtp
+      SMTP_HOST: smtp.mailgun.org
+      SMTP_USER: user1
+      SMTP_PASS: pass1
+      DB_DATABASE: app1_db
+
+  php2:
+    <<: *php-template
+    environment:
+      APP_NAME: Customer2
+      EMAIL_FROM: no-reply@instance2.yourdomain.com
+      # ... different email creds, etc.
+      DB_DATABASE: app2_db
+
+  php3:
+    <<: *php-template
+    environment:
+      DB_DATABASE: app3_db
+
+  php4:
+    <<: *php-template
+    environment:
+      DB_DATABASE: app4_db
+
+  php5:
+    <<: *php-template
+    environment:
+      DB_DATABASE: app5_db
+
+  db1:
+    <<: *db-template
+    environment:
+      POSTGRES_DB: app1_db
+      POSTGRES_USER: app1_user
+      POSTGRES_PASSWORD: securepass1
+    volumes:
+      - db1_data:/var/lib/postgresql/data
+
+  db2:
+    <<: *db-template
+    environment:
+      POSTGRES_DB: app2_db
+      POSTGRES_USER: app2_user
+      POSTGRES_PASSWORD: securepass2
+    volumes:
+      - db2_data:/var/lib/postgresql/data
+
+  db3:
+    <<: *db-template
+    environment:
+      POSTGRES_DB: app3_db
+    volumes:
+      - db3_data:/var/lib/postgresql/data
+
+  db4:
+    <<: *db-template
+    environment:
+      POSTGRES_DB: app4_db
+    volumes:
+      - db4_data:/var/lib/postgresql/data
+
+  db5:
+    <<: *db-template
+    environment:
+      POSTGRES_DB: app5_db
+    volumes:
+      - db5_data:/var/lib/postgresql/data
+
+x-php-template: &php-template
+  image: php:8.3-fpm
+  volumes:
+    - ./app:/var/www/html
+  working_dir: /var/www/html
+
+x-db-template: &db-template
+  image: postgres:16
+  restart: always
+
+volumes:
+  db1_data:
+  db2_data:
+  db3_data:
+  db4_data:
+  db5_data:
